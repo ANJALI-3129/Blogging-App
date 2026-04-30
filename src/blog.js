@@ -45,28 +45,24 @@ export default function Blog() {
     }
 
     try {
-      // UPDATE BLOG
       if (isEditing) {
         const blogRef = doc(db, "blogs", currentBlogId);
 
         await updateDoc(blogRef, {
           title: formData.title,
           content: formData.content,
-          category: formData.category,
+          category: formData.category || "Blog",
         });
 
         setIsEditing(false);
         setCurrentBlogId(null);
-      }
-
-      // ADD BLOG
-      else {
+      } else {
         const docRef = doc(collection(db, "blogs"));
 
         await setDoc(docRef, {
           title: formData.title,
           content: formData.content,
-
+          category: formData.category,
           createdOn: new Date(),
         });
       }
@@ -101,6 +97,7 @@ export default function Blog() {
     setFormData({
       title: blog.title,
       content: blog.content,
+      category: blog.category || "Blog",
     });
 
     setIsEditing(true);
@@ -135,7 +132,6 @@ export default function Blog() {
 
   return (
     <div className="container">
-      {/* SAME NAVBAR */}
       <div className="navbar">
         <div className="logo">
           <h2>Blogging Platform</h2>
@@ -147,7 +143,6 @@ export default function Blog() {
 
       <div className="section">
         <form onSubmit={handleSubmit}>
-          {/* TITLE */}
           <Row label="Title">
             <input
               type="text"
